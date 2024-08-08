@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="org.graph.MainFrame">
+  <grid id="27dc6" binding="mainPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
+    <constraints>
+      <xy x="20" y="20" width="500" height="400"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <grid id="aa655" class="javax.swing.JMenuBar" binding="topMenu" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="0">
+        <constraints border-constraint="North"/>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <grid id="11530" class="javax.swing.JMenu" binding="file" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="0">
+            <constraints/>
+            <properties>
+              <text value="File"/>
+            </properties>
+            <border type="none"/>
+            <children>
+              <component id="3267c" class="javax.swing.JMenuItem" binding="newFile">
+                <constraints/>
+                <properties>
+                  <text value="New"/>
+                </properties>
+              </component>
+              <component id="c962d" class="javax.swing.JMenuItem" binding="saveFile">
+                <constraints/>
+                <properties>
+                  <enabled value="false"/>
+                  <text value="Save"/>
+                </properties>
+              </component>
+              <component id="23550" class="javax.swing.JMenuItem" binding="openFile">
+                <constraints/>
+                <properties>
+                  <text value="Open"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
+          <grid id="9b644" class="javax.swing.JMenu" binding="report" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
+            <constraints/>
+            <properties>
+              <text value="Report"/>
+            </properties>
+            <border type="none"/>
+            <children>
+              <component id="c7301" class="javax.swing.JMenuItem" binding="mathOpsReport">
+                <constraints/>
+                <properties>
+                  <enabled value="false"/>
+                  <text value="Mathematical operators"/>
+                </properties>
+              </component>
+              <component id="c5ad2" class="javax.swing.JMenuItem" binding="colorsReport">
+                <constraints/>
+                <properties>
+                  <enabled value="false"/>
+                  <text value="Colors"/>
+                </properties>
+              </component>
+              <component id="cf878" class="javax.swing.JMenuItem" binding="objectsReport">
+                <constraints/>
+                <properties>
+                  <enabled value="false"/>
+                  <text value="Objects"/>
+                </properties>
+              </component>
+              <component id="7e66b" class="javax.swing.JMenuItem" binding="animationsReport">
+                <constraints/>
+                <properties>
+                  <enabled value="false"/>
+                  <selected value="false"/>
+                  <text value="Animations"/>
+                </properties>
+              </component>
+              <component id="7f0f7" class="javax.swing.JMenuItem" binding="errorsReport">
+                <constraints/>
+                <properties>
+                  <enabled value="false"/>
+                  <text value="Errors"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
+        </children>
+      </grid>
+      <grid id="bf7a3" binding="bodyPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
+        <constraints border-constraint="Center"/>
+        <properties>
+          <preferredSize width="800" height="450"/>
+        </properties>
+        <border type="empty">
+          <size top="10" left="10" bottom="10" right="10"/>
+        </border>
+        <children/>
+      </grid>
+      <grid id="9e52e" binding="bottomPanel" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="0">
+        <constraints border-constraint="South"/>
+        <properties/>
+        <border type="empty">
+          <size top="10" left="10" bottom="10" right="10"/>
+        </border>
+        <children/>
+      </grid>
+    </children>
+  </grid>
+</form>
