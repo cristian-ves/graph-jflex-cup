@@ -36,3 +36,7 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+jflex-full-1.9.1.jar
+java-cup-11b.jar
+java-cup-11b-runtime.jar

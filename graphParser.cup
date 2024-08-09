@@ -1,0 +1,109 @@
+// Header java code
+package org.graph.backend;
+
+import java_cup.runtime.*;
+
+// Class name
+parser code {:
+
+    public GraphParser (GraphLexer lex) {
+        super(lex);
+    }
+
+    public void syntax_error(Symbol cur_token) {
+        System.out.println("syntaxerr: " + symbl_name_from_id(cur_token.sym));
+    }
+
+:}
+
+// Terminals
+terminal NUMBER, NAME, ADDITION, SUBSTRACTION, MULTIPLICATION, DIVISION, PARENTHESES_START, PARENTHESES_END, COMMA, GRAFICAR, ANIMAR, CIRCULO, CUADRADO, RECTANGULO, LINEA, POLIGONO, AZUL, ROJO, AMARILLO, VERDE, CELESTE, NEGRO, ROSADO, CAFE, NARANJA, LINEA_A, CURVA, OBJETO, ANTERIOR;
+
+// Non-terminals
+non terminal s1, s2, s3, s4, s5, s6, anmt, expr, term, factor, color;
+
+// Initial state
+start with s1;
+
+// Productions
+s1 ::= 
+    GRAFICAR s2
+    |
+    ANIMAR s3
+    ;
+
+s2 ::=
+    CIRCULO s4
+    |
+    CUADRADO s4
+    |
+    RECTANGULO s5
+    |
+    LINEA s5
+    |
+    POLIGONO s6
+    ;
+
+s3 ::=
+    OBJETO ANTERIOR PARENTHESES_START anmt COMMA expr COMMA expr COMMA expr PARENTHESES_END
+    ;
+
+anmt ::=
+    LINEA_A
+    |
+    CURVA
+    ;
+
+s4 ::=
+    PARENTHESES_START NAME COMMA expr COMMA expr COMMA expr COMMA color PARENTHESES_END
+    ;
+
+s5 ::=
+    PARENTHESES_START NAME COMMA expr COMMA expr COMMA expr COMMA expr COMMA color PARENTHESES_END
+    ;
+
+s6 ::=
+    PARENTHESES_START NAME COMMA expr COMMA expr COMMA expr COMMA expr COMMA expr COMMA color PARENTHESES_END
+    ;
+
+expr ::=
+    expr:e ADDITION term:t {: System.out.println("addition of " + " expr " + e + " & term " + t + " = " + (Integer.valueOf((String) e) + Integer.valueOf((String) t))); :}
+    |
+    expr:e SUBSTRACTION term:t
+    |
+    term
+    ;
+
+term ::=
+    term MULTIPLICATION factor
+    |
+    term DIVISION factor
+    |
+    factor
+    ;
+
+factor ::=
+    NUMBER
+    |
+    PARENTHESES_START expr PARENTHESES_END
+    ;
+
+color ::=
+    AZUL
+    |
+    ROJO
+    |
+    AMARILLO
+    |
+    VERDE
+    |
+    CELESTE
+    |
+    NEGRO
+    |
+    ROSADO
+    |
+    CAFE
+    |
+    NARANJA
+    ;
