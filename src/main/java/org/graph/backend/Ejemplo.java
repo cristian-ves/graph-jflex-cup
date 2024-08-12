@@ -7,7 +7,7 @@ public class Ejemplo {
     public static void main(String[] args) {
         System.out.println("Hello world");
 
-        String entrada = "graficar poligono ( PoligA, (2.3-2)*12  + 2 -1/12, 15, 6, 50 / 2, 12, amarillo)";
+        String entrada = "graficar poligono ( PoligA, (2.3-2)*12  + 2 -1/12, 15, 6, 50 / 2, 12(90-123.1/2), amarillo)";
 
         StringReader reader = new StringReader(entrada);
         GraphLexer lexer = new GraphLexer(reader);

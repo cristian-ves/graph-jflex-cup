@@ -11,12 +11,12 @@ public class sym {
   public static final int LINEA = 16;
   public static final int PARENTHESES_END = 9;
   public static final int DIVISION = 7;
-  public static final int CURVA = 28;
+  public static final int CURVA = 27;
   public static final int ANIMAR = 12;
   public static final int CAFE = 25;
   public static final int NAME = 3;
   public static final int CUADRADO = 14;
-  public static final int OBJETO = 29;
+  public static final int OBJETO = 28;
   public static final int VERDE = 21;
   public static final int PARENTHESES_START = 8;
   public static final int ROJO = 19;
@@ -28,13 +28,12 @@ public class sym {
   public static final int NUMBER = 2;
   public static final int MULTIPLICATION = 6;
   public static final int CELESTE = 22;
-  public static final int LINEA_A = 27;
   public static final int POLIGONO = 17;
   public static final int error = 1;
   public static final int SUBSTRACTION = 5;
   public static final int CIRCULO = 13;
   public static final int AZUL = 18;
-  public static final int ANTERIOR = 30;
+  public static final int ANTERIOR = 29;
   public static final int NEGRO = 23;
   public static final int ADDITION = 4;
   public static final int NARANJA = 26;
@@ -67,7 +66,6 @@ public class sym {
   "ROSADO",
   "CAFE",
   "NARANJA",
-  "LINEA_A",
   "CURVA",
   "OBJETO",
   "ANTERIOR"

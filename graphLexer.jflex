@@ -18,7 +18,7 @@ ws = {delim}+
 letter = [A-Za-z\_]
 digit = [0-9]
 number = {digit}+(\.{digit}+)?
-name = {letter}+
+name = {letter}+({number}*{letter}*)*
 
 %%
 <YYINITIAL> {
@@ -43,7 +43,6 @@ name = {letter}+
     "cafe" {return new Symbol(sym.CAFE, yyline+1, yycolumn+1, yytext());}
     "naranja" {return new Symbol(sym.NARANJA, yyline+1, yycolumn+1, yytext());}
     "curva" {return new Symbol(sym.CURVA, yyline+1, yycolumn+1, yytext());}
-    "linea_a" {return new Symbol(sym.LINEA_A, yyline+1, yycolumn+1, yytext());}
     
     {ws} {/* ignore */}
     {number} {return new Symbol(sym.NUMBER, yyline+1, yycolumn+1, yytext());}

@@ -1,16 +1,21 @@
 package org.graph.frontend;
 
+import org.graph.backend.GraphLexer;
+import org.graph.backend.GraphParser;
+
 import javax.swing.*;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledDocument;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainFrame {
+public class MainFrame extends JFrame{
     private JPanel mainPanel;
     private JMenu file;
     private JMenuItem newFile;
@@ -31,6 +36,11 @@ public class MainFrame {
     private JPanel lineColPane;
     private JLabel lineLabel;
     private JLabel colLabel;
+    private GraphCanvas canvas;
+
+    public MainFrame(String title){
+        super(title);
+    }
 
     public JPanel getMainPanel() {
         return mainPanel;
@@ -46,6 +56,20 @@ public class MainFrame {
 
     public JMenuItem getSaveFile() {
         return saveFile;
+    }
+
+    public void compile() {
+        String entrada = textPane.getText();
+
+        StringReader reader = new StringReader(entrada);
+        GraphLexer lexer = new GraphLexer(reader);
+        GraphParser parser = new GraphParser(lexer);
+
+        try {
+            parser.parse();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void showTextPane( ) {
@@ -89,6 +113,18 @@ public class MainFrame {
                     ex.printStackTrace();
                 }
             }
+        });
+
+        compileButton.addActionListener(actionEvent -> {
+            bodyPanel.removeAll();
+
+            canvas = new GraphCanvas();
+
+            bodyPanel.add(canvas);
+            compile();
+
+            bodyPanel.revalidate();
+            bodyPanel.repaint();
         });
 
     }
@@ -146,4 +182,5 @@ public class MainFrame {
             }
         }
     }
+
 }

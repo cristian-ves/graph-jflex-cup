@@ -17,15 +17,21 @@ parser code {:
 :}
 
 // Terminals
-terminal NUMBER, NAME, ADDITION, SUBSTRACTION, MULTIPLICATION, DIVISION, PARENTHESES_START, PARENTHESES_END, COMMA, GRAFICAR, ANIMAR, CIRCULO, CUADRADO, RECTANGULO, LINEA, POLIGONO, AZUL, ROJO, AMARILLO, VERDE, CELESTE, NEGRO, ROSADO, CAFE, NARANJA, LINEA_A, CURVA, OBJETO, ANTERIOR;
+terminal NUMBER, NAME, ADDITION, SUBSTRACTION, MULTIPLICATION, DIVISION, PARENTHESES_START, PARENTHESES_END, COMMA, GRAFICAR, ANIMAR, CIRCULO, CUADRADO, RECTANGULO, LINEA, POLIGONO, AZUL, ROJO, AMARILLO, VERDE, CELESTE, NEGRO, ROSADO, CAFE, NARANJA, CURVA, OBJETO, ANTERIOR;
 
 // Non-terminals
-non terminal s1, s2, s3, s4, s5, s6, anmt, expr, term, factor, color;
+non terminal s, s1, s2, s3, s4, s5, s6, anmt, expr, term, factor, color;
 
 // Initial state
-start with s1;
+start with s;
 
 // Productions
+s ::=
+    s s1
+    |
+    s1
+    ;
+
 s1 ::= 
     GRAFICAR s2
     |
@@ -49,7 +55,7 @@ s3 ::=
     ;
 
 anmt ::=
-    LINEA_A
+    LINEA
     |
     CURVA
     ;
@@ -67,7 +73,7 @@ s6 ::=
     ;
 
 expr ::=
-    expr:e ADDITION term:t {: System.out.println("addition of " + " expr " + e + " & term " + t + " = " + (Integer.valueOf((String) e) + Integer.valueOf((String) t))); :}
+    expr ADDITION term
     |
     expr:e SUBSTRACTION term:t
     |
@@ -80,10 +86,12 @@ term ::=
     term DIVISION factor
     |
     factor
+    |
+    factor factor
     ;
 
 factor ::=
-    NUMBER
+    NUMBER:n {: System.out.println("Number: " + n); :}
     |
     PARENTHESES_START expr PARENTHESES_END
     ;

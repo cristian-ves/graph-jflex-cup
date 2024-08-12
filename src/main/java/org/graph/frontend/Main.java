@@ -4,27 +4,25 @@ import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) {
-        MainFrame mainFrame = new MainFrame();
-        JPanel mainPanel = mainFrame.getMainPanel();
 
-        JFrame frame = new JFrame("Graph JFlex & Cup");
+        MainFrame frame = new MainFrame("Graph JFlex & Cup");
+        JPanel mainPanel = frame.getMainPanel();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().add(mainPanel);
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
-        mainFrame.getNewFile().addActionListener(actionEvent -> {
-            mainFrame.showTextPane();
+        frame.getNewFile().addActionListener(actionEvent -> {
+            frame.showTextPane();
         });
 
-        mainFrame.getOpenFile().addActionListener(actionEvent -> {
-            mainFrame.openNewFile(frame);
+        frame.getOpenFile().addActionListener(actionEvent -> {
+            frame.openNewFile(frame);
         });
 
-        mainFrame.getSaveFile().addActionListener(actionEvent -> {
-            mainFrame.saveFile(frame);
+        frame.getSaveFile().addActionListener(actionEvent -> {
+            frame.saveFile(frame);
         });
-
     }
 }

@@ -90,7 +90,7 @@
       <grid id="bf7a3" binding="bodyPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
         <constraints border-constraint="Center"/>
         <properties>
-          <preferredSize width="800" height="450"/>
+          <preferredSize width="820" height="470"/>
         </properties>
         <border type="empty">
           <size top="10" left="10" bottom="10" right="10"/>
