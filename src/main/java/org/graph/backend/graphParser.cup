@@ -10,9 +10,15 @@ parser code {:
         super(lex);
     }
 
-    public void syntax_error(Symbol cur_token) {
-        System.out.println("syntaxerr: " + symbl_name_from_id(cur_token.sym));
+    public void syntax_error(Symbol s) {
+        System.out.println("Syntax error in line: " + (s.left) +
+        " column: "+s.right+ ". didn't expect component: " +s.value+"."); 
     }
+
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{ 
+        System.out.println("Sintax error unrecovered in line: " + 
+        (s.left)+ " column: "+s.right+". Component: " + s.value + " not recognized."); 
+    } 
 
 :}
 
@@ -36,6 +42,8 @@ s1 ::=
     GRAFICAR s2
     |
     ANIMAR s3
+    |
+    error s1
     ;
 
 s2 ::=

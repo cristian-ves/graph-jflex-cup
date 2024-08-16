@@ -37,6 +37,6 @@ build/
 ### Mac OS ###
 .DS_Store
 
-jflex-full-1.9.1.jar
-java-cup-11b.jar
-java-cup-11b-runtime.jar
+./src/main/java/org/graph/backend/jflex-full-1.9.1.jar
+./src/main/java/org/graph/backend/java-cup-11b.jar
+./src/main/java/org/graph/backend/java-cup-11b-runtime.jar

@@ -37,6 +37,8 @@ public class MainFrame extends JFrame{
     private JLabel lineLabel;
     private JLabel colLabel;
     private GraphCanvas canvas;
+    private JButton animateButton;
+    private JButton exportButton;
 
     public MainFrame(String title){
         super(title);
@@ -56,6 +58,14 @@ public class MainFrame extends JFrame{
 
     public JMenuItem getSaveFile() {
         return saveFile;
+    }
+
+    public JButton getAnimateButton() {
+        return animateButton;
+    }
+
+    public JButton getExportButton() {
+        return exportButton;
     }
 
     public void compile() {
@@ -117,14 +127,26 @@ public class MainFrame extends JFrame{
 
         compileButton.addActionListener(actionEvent -> {
             bodyPanel.removeAll();
+            bottomPanel.removeAll();
 
             canvas = new GraphCanvas();
+            canvas.setBounds(10, 10, canvas.getWidth(), canvas.getHeight());
 
-            bodyPanel.add(canvas);
+            bodyPanel.add(canvas, BorderLayout.CENTER);
+
+            animateButton = new JButton("Animate");
+            exportButton = new JButton("Export");
+
+            bottomPanel.add(animateButton);
+            bottomPanel.add(exportButton);
+            bottomPanel.revalidate();
+            bottomPanel.repaint();
+
             compile();
 
             bodyPanel.revalidate();
             bodyPanel.repaint();
+
         });
 
     }

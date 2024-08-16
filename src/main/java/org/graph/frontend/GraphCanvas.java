@@ -5,7 +5,7 @@ import java.awt.*;
 public class GraphCanvas extends Canvas {
 
     public GraphCanvas() {
-        setSize(800, 450);
+        setSize(800, 430);
         setBackground(Color.white);
     }
 
