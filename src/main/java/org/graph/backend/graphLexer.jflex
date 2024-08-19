@@ -11,6 +11,7 @@ import java_cup.runtime.*;
 %column
 %public
 %cup
+%ignorecase
 
 // Regular definitions
 delim = [ \t\n]

@@ -1,32 +1,40 @@
 // Header java code
 package org.graph.backend;
 
+import java.awt.Color;
 import java_cup.runtime.*;
+
+import org.graph.backend.tree.Node;
+import org.graph.frontend.canvas.*;
 
 // Class name
 parser code {:
 
-    public GraphParser (GraphLexer lex) {
+    private GraphCanvas canvas;
+
+    public GraphParser(GraphLexer lex, GraphCanvas canvas) {
         super(lex);
+        this.canvas = canvas;
     }
 
     public void syntax_error(Symbol s) {
         System.out.println("Syntax error in line: " + (s.left) +
-        " column: "+s.right+ ". didn't expect component: " +s.value+"."); 
+        " column: "+s.right+ ". didn't expect component: " +s.value+".");
     }
 
-    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{ 
-        System.out.println("Sintax error unrecovered in line: " + 
-        (s.left)+ " column: "+s.right+". Component: " + s.value + " not recognized."); 
-    } 
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{
+        System.out.println("Sintax error unrecovered in line: " +
+        (s.left)+ " column: "+s.right+". Component: " + s.value + " not recognized.");
+    }
 
 :}
 
 // Terminals
-terminal NUMBER, NAME, ADDITION, SUBSTRACTION, MULTIPLICATION, DIVISION, PARENTHESES_START, PARENTHESES_END, COMMA, GRAFICAR, ANIMAR, CIRCULO, CUADRADO, RECTANGULO, LINEA, POLIGONO, AZUL, ROJO, AMARILLO, VERDE, CELESTE, NEGRO, ROSADO, CAFE, NARANJA, CURVA, OBJETO, ANTERIOR;
+terminal String NUMBER, NAME, ADDITION, SUBSTRACTION, MULTIPLICATION, DIVISION, PARENTHESES_START, PARENTHESES_END, COMMA, GRAFICAR, ANIMAR, CIRCULO, CUADRADO, RECTANGULO, LINEA, POLIGONO, AZUL, ROJO, AMARILLO, VERDE, CELESTE, NEGRO, ROSADO, CAFE, NARANJA, CURVA, OBJETO, ANTERIOR;
 
 // Non-terminals
-non terminal s, s1, s2, s3, s4, s5, s6, anmt, expr, term, factor, color;
+non terminal s, s1, s2, s3, s4, s5, s6, s7, s8, anmt, color;
+non terminal Node expr, term, factor;
 
 // Initial state
 start with s;
@@ -38,7 +46,7 @@ s ::=
     s1
     ;
 
-s1 ::= 
+s1 ::=
     GRAFICAR s2
     |
     ANIMAR s3
@@ -49,9 +57,9 @@ s1 ::=
 s2 ::=
     CIRCULO s4
     |
-    CUADRADO s4
+    CUADRADO s7
     |
-    RECTANGULO s5
+    RECTANGULO s8
     |
     LINEA s5
     |
@@ -69,57 +77,115 @@ anmt ::=
     ;
 
 s4 ::=
-    PARENTHESES_START NAME COMMA expr COMMA expr COMMA expr COMMA color PARENTHESES_END
+    PARENTHESES_START NAME:n COMMA expr:x COMMA expr:y COMMA expr:r COMMA color:c PARENTHESES_END
+    {:
+        String name = n;
+        double xValue = x.getValue();
+        double yValue = y.getValue();
+        double rValue = r.getValue();
+        Color colorValue = (Color) c;
+
+        canvas.addCircle(name, xValue, yValue, rValue, colorValue);
+    :}
     ;
 
 s5 ::=
-    PARENTHESES_START NAME COMMA expr COMMA expr COMMA expr COMMA expr COMMA color PARENTHESES_END
+    PARENTHESES_START NAME:n COMMA expr:x1 COMMA expr:y1 COMMA expr:x2 COMMA expr:y2 COMMA color:c PARENTHESES_END
+    {:
+        String name = n;
+        double x1Value = x1.getValue();
+        double y1Value = y1.getValue();
+        double x2Value = x2.getValue();
+        double y2Value = y2.getValue();
+        Color colorValue = (Color) c;
+
+        canvas.addLine(name, x1Value, y1Value, x2Value, y2Value, colorValue);
+    :}
     ;
 
 s6 ::=
-    PARENTHESES_START NAME COMMA expr COMMA expr COMMA expr COMMA expr COMMA expr COMMA color PARENTHESES_END
+    PARENTHESES_START NAME:n COMMA expr:x COMMA expr:y COMMA expr:cl COMMA expr:w COMMA expr:h COMMA color:c PARENTHESES_END
+    {:
+        String name = n;
+        double xValue = x.getValue();
+        double yValue = y.getValue();
+        int clValue = (int) cl.getValue();
+        double wValue = w.getValue();
+        double hValue = h.getValue();
+        Color colorValue = (Color) c;
+
+        canvas.addPol(name, xValue, yValue, clValue, wValue, hValue, colorValue);
+
+    :}
+    ;
+
+s7 ::=
+    PARENTHESES_START NAME:n COMMA expr:x COMMA expr:y COMMA expr:l COMMA color:c PARENTHESES_END
+    {:
+        String name = n;
+        double xValue = x.getValue();
+        double yValue = y.getValue();
+        double lValue = l.getValue();
+        Color colorValue = (Color) c;
+
+        canvas.addSqr(name, xValue, yValue, lValue, colorValue);
+    :}
+    ;
+
+s8 ::=
+    PARENTHESES_START NAME:n COMMA expr:x COMMA expr:y COMMA expr:l1 COMMA expr:l2 COMMA color:c PARENTHESES_END
+    {:
+        String name = n;
+        double xValue = x.getValue();
+        double yValue = y.getValue();
+        double l1Value = l1.getValue();
+        double l2Value = l2.getValue();
+        Color colorValue = (Color) c;
+
+        canvas.addRec(name, xValue, yValue, l1Value, l2Value, colorValue);
+    :}
     ;
 
 expr ::=
-    expr ADDITION term
+    expr:e ADDITION term:t {: RESULT = new Node(e, t, Node.Type.ADDITION);:}
     |
-    expr:e SUBSTRACTION term:t
+    expr:e SUBSTRACTION term:t {: RESULT = new Node(e, t, Node.Type.SUBSTRACTION); :}
     |
-    term
+    term:t {: RESULT = t; :}
     ;
 
 term ::=
-    term MULTIPLICATION factor
+    term:t MULTIPLICATION factor:f {: RESULT = new Node(t, f, Node.Type.MULTIPLICATION);:}
     |
-    term DIVISION factor
+    term:t DIVISION factor:f {: RESULT = new Node(t, f, Node.Type.DIVISION);:}
     |
-    factor
+    factor:f {: RESULT = f; :}
     |
-    factor factor
+    factor:f1 factor:f2 {: RESULT = new Node(f1, f2, Node.Type.MULTIPLICATION); :}
     ;
 
 factor ::=
-    NUMBER:n {: System.out.println("Number: " + n); :}
+    NUMBER:n {: RESULT = new Node(Double.parseDouble(n)); :}
     |
-    PARENTHESES_START expr PARENTHESES_END
+    PARENTHESES_START expr:e PARENTHESES_END {: RESULT = e; :}
     ;
 
 color ::=
-    AZUL
+    AZUL {: RESULT = Color.BLUE; :}
     |
-    ROJO
+    ROJO {: RESULT = Color.RED; :}
     |
-    AMARILLO
+    AMARILLO {: RESULT = Color.YELLOW; :}
     |
-    VERDE
+    VERDE {: RESULT = Color.GREEN; :}
     |
-    CELESTE
+    CELESTE {: RESULT = Color.CYAN; :}
     |
-    NEGRO
+    NEGRO {: RESULT = Color.BLACK; :}
     |
-    ROSADO
+    ROSADO {: RESULT = Color.PINK; :}
     |
-    CAFE
+    CAFE {: RESULT = new Color(139, 69, 19); :}
     |
-    NARANJA
+    NARANJA {: RESULT = Color.ORANGE; :}
     ;

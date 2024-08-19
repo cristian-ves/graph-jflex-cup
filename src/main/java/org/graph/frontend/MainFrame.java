@@ -2,6 +2,7 @@ package org.graph.frontend;
 
 import org.graph.backend.GraphLexer;
 import org.graph.backend.GraphParser;
+import org.graph.frontend.canvas.GraphCanvas;
 
 import javax.swing.*;
 import javax.swing.event.CaretEvent;
@@ -9,8 +10,6 @@ import javax.swing.event.CaretListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledDocument;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,12 +67,12 @@ public class MainFrame extends JFrame{
         return exportButton;
     }
 
-    public void compile() {
+    public void compile(GraphCanvas canvas) {
         String entrada = textPane.getText();
 
         StringReader reader = new StringReader(entrada);
         GraphLexer lexer = new GraphLexer(reader);
-        GraphParser parser = new GraphParser(lexer);
+        GraphParser parser = new GraphParser(lexer, canvas);
 
         try {
             parser.parse();
@@ -142,7 +141,7 @@ public class MainFrame extends JFrame{
             bottomPanel.revalidate();
             bottomPanel.repaint();
 
-            compile();
+            compile(canvas);
 
             bodyPanel.revalidate();
             bodyPanel.repaint();
