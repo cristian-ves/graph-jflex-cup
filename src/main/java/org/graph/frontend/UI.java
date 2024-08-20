@@ -2,6 +2,7 @@ package org.graph.frontend;
 
 import org.graph.backend.GraphLexer;
 import org.graph.backend.GraphParser;
+import org.graph.backend.export.GraphExporter;
 import org.graph.backend.reports.InstanceReportColor;
 import org.graph.backend.reports.InstanceReportMathOps;
 import org.graph.backend.reports.InstanceReportObjects;
@@ -14,6 +15,7 @@ import org.graph.frontend.canvas.GraphCanvas;
 import javax.swing.*;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledDocument;
 import java.awt.*;
@@ -44,6 +46,7 @@ public class UI extends JFrame{
     private JLabel colLabel;
     private GraphCanvas canvas;
     private JButton animateButton;
+    private JComboBox exportComboBox;
     private JButton exportButton;
 
     private List<InstanceReportMathOps> instancesMathOps;
@@ -77,6 +80,50 @@ public class UI extends JFrame{
 
     public JButton getExportButton() {
         return exportButton;
+    }
+
+    public void exportCanvas () {
+
+        JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle("Exportar grafico");
+        
+        int selectionCombo = exportComboBox.getSelectedIndex();
+        
+        if (selectionCombo == -1) {
+            JOptionPane.showMessageDialog(mainPanel, "Debe seleccionar una opcion.");
+        } else if (selectionCombo == 1) {
+            chooser.setFileFilter(new FileNameExtensionFilter("PNG Images", "png"));
+            int selection = chooser.showSaveDialog(this);
+    
+            if (selection == JFileChooser.APPROVE_OPTION) {
+                File file = chooser.getSelectedFile();
+                String filePath = file.getAbsolutePath();
+    
+                if(!filePath.endsWith(".png")){
+                    filePath += ".png";
+                }
+    
+                GraphExporter.exportCanvasToPNG(canvas, filePath);
+            }
+        } else if (selectionCombo == 0) {
+
+            chooser.setFileFilter(new FileNameExtensionFilter("PDF Document", "pdf"));
+
+            int selection = chooser.showOpenDialog(this);
+
+            if (selection == JFileChooser.APPROVE_OPTION) {
+                File file = chooser.getSelectedFile();
+                String filePath = file.getAbsolutePath();
+
+                if(!filePath.endsWith(".pdf")){
+                    filePath += ".pdf";
+                }
+
+                GraphExporter.exportCanvasToPDF(canvas, filePath);
+            }
+        }
+
+
     }
 
     public void compile(GraphCanvas canvas) {
@@ -208,9 +255,11 @@ public class UI extends JFrame{
 
             animateButton = new JButton("Animate");
             exportButton = new JButton("Export");
+            exportComboBox = new JComboBox(new String[]{"PDF", "PNG"});
 
             bottomPanel.add(animateButton);
             bottomPanel.add(exportButton);
+            bottomPanel.add(exportComboBox);
             bottomPanel.revalidate();
             bottomPanel.repaint();
 
@@ -218,6 +267,10 @@ public class UI extends JFrame{
 
             bodyPanel.revalidate();
             bodyPanel.repaint();
+
+            exportButton.addActionListener(actionEvent1 -> {
+                exportCanvas();
+            });
 
         });
 
