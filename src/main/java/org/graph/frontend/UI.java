@@ -2,6 +2,10 @@ package org.graph.frontend;
 
 import org.graph.backend.GraphLexer;
 import org.graph.backend.GraphParser;
+import org.graph.backend.reports.InstanceReportColor;
+import org.graph.backend.reports.InstanceReportMathOps;
+import org.graph.frontend.ReportsUI.ReportColorsUI;
+import org.graph.frontend.ReportsUI.ReportMathOpsUI;
 import org.graph.frontend.canvas.GraphCanvas;
 
 import javax.swing.*;
@@ -14,7 +18,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainFrame extends JFrame{
+public class UI extends JFrame{
     private JPanel mainPanel;
     private JMenu file;
     private JMenuItem newFile;
@@ -39,7 +43,10 @@ public class MainFrame extends JFrame{
     private JButton animateButton;
     private JButton exportButton;
 
-    public MainFrame(String title){
+    private List<InstanceReportMathOps> instancesMathOps;
+    private List<InstanceReportColor> instancesColors;
+
+    public UI(String title){
         super(title);
     }
 
@@ -76,9 +83,45 @@ public class MainFrame extends JFrame{
 
         try {
             parser.parse();
+            mathOpsReport.setEnabled(true);
+            colorsReport.setEnabled(true);
+            objectsReport.setEnabled(true);
+            animationsReport.setEnabled(true);
+            errorsReport.setEnabled(true);
+
+            mathOpsReport.addActionListener(actionEvent -> {
+                showMathOpsReport(lexer);
+            });
+
+            colorsReport.addActionListener(actionEvent -> {
+                showColorsReport(lexer);
+            });
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void showColorsReport (GraphLexer lexer) {
+
+        instancesColors = new ArrayList<>();
+        instancesColors.add(new InstanceReportColor("Azul", lexer.getTimesBlue()));
+        instancesColors.add(new InstanceReportColor("Rojo", lexer.getTimesRojo()));
+        instancesColors.add(new InstanceReportColor("Amarillo", lexer.getTimesAmarillo()));
+        instancesColors.add(new InstanceReportColor("Verde", lexer.getTimesVerde()));
+        instancesColors.add(new InstanceReportColor("Celeste", lexer.getTimesCeleste()));
+        instancesColors.add(new InstanceReportColor("Negro", lexer.getTimesNegro()));
+        instancesColors.add(new InstanceReportColor("Rosado", lexer.getTimesRosado()));
+        instancesColors.add(new InstanceReportColor("Cafe", lexer.getTimesCafe()));
+        instancesColors.add(new InstanceReportColor("Naranja", lexer.getTimesNaranja()));
+        new ReportColorsUI(instancesColors);
+    }
+
+    public void showMathOpsReport (GraphLexer lexer) {
+
+        instancesMathOps = lexer.getMathOps();
+        new ReportMathOpsUI(instancesMathOps);
+
     }
 
     public void showTextPane( ) {
@@ -203,5 +246,7 @@ public class MainFrame extends JFrame{
             }
         }
     }
+
+
 
 }

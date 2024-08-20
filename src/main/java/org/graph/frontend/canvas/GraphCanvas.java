@@ -21,40 +21,38 @@ public class GraphCanvas extends Canvas {
     public void paint(Graphics g) {
         super.paint(g);
 
-        //Draw all lines
+        // Draw and fill all lines
         for (Line line : lines) {
             g.setColor(line.getColor());
             g.drawLine((int) line.getX1(), (int) line.getY1(), (int) line.getX2(), (int) line.getY2());
             g.drawString(line.getNombre(), (int) ((line.getX1() + line.getX2()) / 2), (int) line.getY1() - 5);
         }
 
-        // Draw circles
+        // Draw and fill circles
         for (Circle circle : circles) {
             g.setColor(circle.getColor());
-            g.drawOval((int) circle.getX(), (int) circle.getY(), (int) circle.getRadius(), (int) circle.getRadius());
+            g.fillOval((int) circle.getX(), (int) circle.getY(), (int) circle.getRadius(), (int) circle.getRadius());
             g.drawString(circle.getNombre(), (int) circle.getX(), (int) circle.getY() - 5);
         }
 
-        // Draw squares
+        // Draw and fill squares
         for (Sqr sqr : sqrs) {
             g.setColor(sqr.getColor());
-            g.drawRect((int) sqr.getX(), (int) sqr.getY(), (int) sqr.getL(), (int) sqr.getL());
+            g.fillRect((int) sqr.getX(), (int) sqr.getY(), (int) sqr.getL(), (int) sqr.getL());
             g.drawString(sqr.getNombre(), (int) sqr.getX(), (int) sqr.getY() - 5);
         }
 
-        // Draw recs
+        // Draw and fill rectangles
         for (Rec rec : recs) {
             g.setColor(rec.getColor());
-            g.drawRect((int) rec.getX(), (int) rec.getY(), (int) rec.getL1(), (int) rec.getL2());
+            g.fillRect((int) rec.getX(), (int) rec.getY(), (int) rec.getL1(), (int) rec.getL2());
             g.drawString(rec.getNombre(), (int) rec.getX(), (int) rec.getY() - 5);
         }
 
-        // Draw pols
+        // Draw and fill polygons
         for (Pol pol : pols) {
             graphPol(pol, g);
-            g.drawString(pol.getNombre(), (int) pol.getX(), (int) pol.getY() - 5);
         }
-
     }
 
     public void addLine(String nombre, double x1, double y1, double x2, double y2, Color color) {
@@ -93,15 +91,23 @@ public class GraphCanvas extends Canvas {
         int[] xPoints = new int[pol.getCl()];
         int[] yPoints = new int[pol.getCl()];
 
+        int topMostY = Integer.MAX_VALUE;
         double angle = 2 * Math.PI / pol.getCl();
 
         for (int i = 0; i < pol.getCl(); i++) {
             xPoints[i] = (int) pol.getX() + (int) (pol.getW() / 2 * Math.cos(i * angle));
             yPoints[i] = (int) pol.getY() + (int) (pol.getH() / 2 * Math.sin(i * angle));
+
+            if(yPoints[i] < topMostY) {
+                topMostY = yPoints[i];
+            }
+
         }
 
         g.setColor(pol.getColor());
+        g.fillPolygon(xPoints, yPoints, pol.getCl());
         g.drawPolygon(xPoints, yPoints, pol.getCl());
+        g.drawString(pol.getNombre(), (int) pol.getX(), topMostY - 10);
     }
 
 }

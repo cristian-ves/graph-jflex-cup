@@ -6,6 +6,10 @@
 package org.graph.backend;
 
 import java_cup.runtime.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.graph.backend.reports.*;
 
 // Translation rules
 
@@ -391,6 +395,69 @@ public class GraphLexer implements java_cup.runtime.Scanner {
   /** Whether the user-EOF-code has already been executed. */
   private boolean zzEOFDone;
 
+  /* user code: */
+    private List<InstanceReportMathOps> instancesMathOps = new ArrayList<>();
+    private Symbol prevToken = null;
+    private Symbol penToken = null;
+    private Symbol curToken = null;
+
+    public List<InstanceReportMathOps> getMathOps() {
+        return instancesMathOps;
+    }
+
+    public void addMathOps(InstanceReportMathOps mathOp) {
+        instancesMathOps.add(mathOp);
+    }
+
+    private void handleMathOp(String operator) {
+        if(operator == null) { // implicit
+            String ocurrence = prevToken.value + "*" + curToken.value;
+            addMathOps(new InstanceReportMathOps(InstanceReportMathOps.Operator.Multiplicacion, yyline, yycolumn, ocurrence));
+        } else {
+            InstanceReportMathOps.Operator op;
+            switch (operator) {
+                case "-":
+                    op = InstanceReportMathOps.Operator.Resta;
+                    break;
+                case "/":
+                    op = InstanceReportMathOps.Operator.Division;
+                    break;
+                case "*":
+                    op = InstanceReportMathOps.Operator.Multiplicacion;
+                    break;
+                default:
+                    op = InstanceReportMathOps.Operator.Suma;
+            }
+            String ocurrence = penToken.value + "" + prevToken.value + "" + curToken.value;
+            addMathOps(new InstanceReportMathOps(op, yyline, yycolumn, ocurrence));
+        }
+    }
+
+    private void updateTokens(Symbol curToken) {
+        if (penToken != null && (penToken.sym == sym.NUMBER || penToken.sym == sym.PARENTHESES_END) &&
+                prevToken != null && (prevToken.sym == sym.ADDITION || prevToken.sym == sym.SUBSTRACTION || prevToken.sym == sym.MULTIPLICATION || prevToken.sym == sym.DIVISION) &&
+                curToken != null && (curToken.sym == sym.NUMBER || curToken.sym == sym.PARENTHESES_START)) {
+
+                handleMathOp((String) prevToken.value);
+            }
+
+        if ((curToken != null && curToken.sym == sym.PARENTHESES_START && prevToken != null && prevToken.sym == sym.PARENTHESES_END) ||
+            (curToken != null && curToken.sym == sym.NUMBER && prevToken != null && prevToken.sym == sym.PARENTHESES_END) ||
+            (curToken != null && curToken.sym == sym.PARENTHESES_START && prevToken != null && prevToken.sym == sym.NUMBER)) {
+
+            handleMathOp(null);
+        }
+
+        penToken = prevToken;
+        prevToken = curToken;
+    }
+
+    private int timesBlue = 0;
+
+    public int getTimesBlue() {
+        return timesBlue;
+    }
+
 
   /**
    * Creates a new scanner
@@ -398,6 +465,8 @@ public class GraphLexer implements java_cup.runtime.Scanner {
    * @param   in  the java.io.Reader to read input from.
    */
   public GraphLexer(java.io.Reader in) {
+      yyline = 1;
+    yychar = 1;
     this.zzReader = in;
   }
 
@@ -816,7 +885,7 @@ public class GraphLexer implements java_cup.runtime.Scanner {
       else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1:
-            { System.out.println("Lexical error: " + yytext() + " in line: " + yyline+1 + " & col " + yycolumn+1);
+            { System.out.println("Lexical error: " + yytext() + " in line: " + yyline + " & col " + yycolumn);
             }
           // fall through
           case 31: break;
@@ -826,142 +895,199 @@ public class GraphLexer implements java_cup.runtime.Scanner {
           // fall through
           case 32: break;
           case 3:
-            { return new Symbol(sym.PARENTHESES_START, yyline+1, yycolumn+1, yytext());
+            { curToken = new Symbol(sym.PARENTHESES_START, yyline, yycolumn, yytext());
+        updateTokens(curToken);
+        return curToken;
             }
           // fall through
           case 33: break;
           case 4:
-            { return new Symbol(sym.PARENTHESES_END, yyline+1, yycolumn+1, yytext());
+            { curToken = new Symbol(sym.PARENTHESES_END, yyline, yycolumn, yytext());
+        updateTokens(curToken);
+        return curToken;
             }
           // fall through
           case 34: break;
           case 5:
-            { return new Symbol(sym.MULTIPLICATION, yyline+1, yycolumn+1, yytext());
+            { curToken = new Symbol(sym.MULTIPLICATION, yyline, yycolumn, yytext());
+        updateTokens(curToken);
+        return curToken;
             }
           // fall through
           case 35: break;
           case 6:
-            { return new Symbol(sym.ADDITION, yyline+1, yycolumn+1, yytext());
+            { curToken = new Symbol(sym.ADDITION, yyline, yycolumn, yytext());
+        updateTokens(curToken);
+        return curToken;
             }
           // fall through
           case 36: break;
           case 7:
-            { return new Symbol(sym.COMMA, yyline+1, yycolumn+1, yytext());
+            { curToken = new Symbol(sym.COMMA, yyline, yycolumn, yytext());
+        updateTokens(curToken);
+        return curToken;
             }
           // fall through
           case 37: break;
           case 8:
-            { return new Symbol(sym.SUBSTRACTION, yyline+1, yycolumn+1, yytext());
+            { curToken = new Symbol(sym.SUBSTRACTION, yyline, yycolumn, yytext());
+        updateTokens(curToken);
+        return curToken;
             }
           // fall through
           case 38: break;
           case 9:
-            { return new Symbol(sym.DIVISION, yyline+1, yycolumn+1, yytext());
+            { curToken = new Symbol(sym.DIVISION, yyline, yycolumn, yytext());
+        updateTokens(curToken);
+        return curToken;
             }
           // fall through
           case 39: break;
           case 10:
-            { return new Symbol(sym.NUMBER, yyline+1, yycolumn+1, yytext());
+            { curToken = new Symbol(sym.NUMBER, yyline, yycolumn, yytext());
+        updateTokens(curToken);
+        return curToken;
             }
           // fall through
           case 40: break;
           case 11:
-            { return new Symbol(sym.NAME, yyline+1, yycolumn+1, yytext());
+            { curToken = new Symbol(sym.NAME, yyline, yycolumn, yytext());
+        updateTokens(curToken);
+        return curToken;
             }
           // fall through
           case 41: break;
           case 12:
-            { return new Symbol(sym.AZUL, yyline+1, yycolumn+1, yytext());
+            { curToken = new Symbol(sym.AZUL, yyline, yycolumn, yytext());
+        updateTokens(curToken);
+        timesBlue++;
+        return curToken;
             }
           // fall through
           case 42: break;
           case 13:
-            { return new Symbol(sym.CAFE, yyline+1, yycolumn+1, yytext());
+            { curToken = new Symbol(sym.CAFE, yyline, yycolumn, yytext());
+        updateTokens(curToken);
+        return curToken;
             }
           // fall through
           case 43: break;
           case 14:
-            { return new Symbol(sym.ROJO, yyline+1, yycolumn+1, yytext());
+            { curToken = new Symbol(sym.ROJO, yyline, yycolumn, yytext());
+        updateTokens(curToken);
+        return curToken;
             }
           // fall through
           case 44: break;
           case 15:
-            { return new Symbol(sym.CURVA, yyline+1, yycolumn+1, yytext());
+            { curToken = new Symbol(sym.CURVA, yyline, yycolumn, yytext());
+        updateTokens(curToken);
+        return curToken;
             }
           // fall through
           case 45: break;
           case 16:
-            { return new Symbol(sym.LINEA, yyline+1, yycolumn+1, yytext());
+            { curToken = new Symbol(sym.LINEA, yyline, yycolumn, yytext());
+        updateTokens(curToken);
+        return curToken;
             }
           // fall through
           case 46: break;
           case 17:
-            { return new Symbol(sym.NEGRO, yyline+1, yycolumn+1, yytext());
+            { curToken = new Symbol(sym.NEGRO, yyline, yycolumn, yytext());
+        updateTokens(curToken);
+        return curToken;
             }
           // fall through
           case 47: break;
           case 18:
-            { return new Symbol(sym.VERDE, yyline+1, yycolumn+1, yytext());
+            { curToken = new Symbol(sym.VERDE, yyline, yycolumn, yytext());
+        updateTokens(curToken);
+        return curToken;
             }
           // fall through
           case 48: break;
           case 19:
-            { return new Symbol(sym.ANIMAR, yyline+1, yycolumn+1, yytext());
+            { curToken = new Symbol(sym.ANIMAR, yyline, yycolumn, yytext());
+        updateTokens(curToken);
+        return curToken;
             }
           // fall through
           case 49: break;
           case 20:
-            { return new Symbol(sym.OBJETO, yyline+1, yycolumn+1, yytext());
+            { curToken = new Symbol(sym.OBJETO, yyline, yycolumn, yytext());
+        updateTokens(curToken);
+        return curToken;
             }
           // fall through
           case 50: break;
           case 21:
-            { return new Symbol(sym.ROSADO, yyline+1, yycolumn+1, yytext());
+            { curToken = new Symbol(sym.ROSADO, yyline, yycolumn, yytext());
+        updateTokens(curToken);
+        return curToken;
             }
           // fall through
           case 51: break;
           case 22:
-            { return new Symbol(sym.CELESTE, yyline+1, yycolumn+1, yytext());
+            { curToken = new Symbol(sym.CELESTE, yyline, yycolumn, yytext());
+        updateTokens(curToken);
+        return curToken;
             }
           // fall through
           case 52: break;
           case 23:
-            { return new Symbol(sym.CIRCULO, yyline+1, yycolumn+1, yytext());
+            { curToken = new Symbol(sym.CIRCULO, yyline, yycolumn, yytext());
+        updateTokens(curToken);
+        return curToken;
             }
           // fall through
           case 53: break;
           case 24:
-            { return new Symbol(sym.NARANJA, yyline+1, yycolumn+1, yytext());
+            { curToken = new Symbol(sym.NARANJA, yyline, yycolumn, yytext());
+        updateTokens(curToken);
+        return curToken;
             }
           // fall through
           case 54: break;
           case 25:
-            { return new Symbol(sym.AMARILLO, yyline+1, yycolumn+1, yytext());
+            { curToken = new Symbol(sym.AMARILLO, yyline, yycolumn, yytext());
+        updateTokens(curToken);
+        return curToken;
             }
           // fall through
           case 55: break;
           case 26:
-            { return new Symbol(sym.ANTERIOR, yyline+1, yycolumn+1, yytext());
+            { curToken = new Symbol(sym.ANTERIOR, yyline, yycolumn, yytext());
+        updateTokens(curToken);
+        return curToken;
             }
           // fall through
           case 56: break;
           case 27:
-            { return new Symbol(sym.CUADRADO, yyline+1, yycolumn+1, yytext());
+            { curToken = new Symbol(sym.CUADRADO, yyline, yycolumn, yytext());
+        updateTokens(curToken);
+        return curToken;
             }
           // fall through
           case 57: break;
           case 28:
-            { return new Symbol(sym.GRAFICAR, yyline+1, yycolumn+1, yytext());
+            { curToken = new Symbol(sym.GRAFICAR, yyline, yycolumn, yytext());
+        updateTokens(curToken);
+        return curToken;
             }
           // fall through
           case 58: break;
           case 29:
-            { return new Symbol(sym.POLIGONO, yyline+1, yycolumn+1, yytext());
+            { curToken = new Symbol(sym.POLIGONO, yyline, yycolumn, yytext());
+        updateTokens(curToken);
+        return curToken;
             }
           // fall through
           case 59: break;
           case 30:
-            { return new Symbol(sym.RECTANGULO, yyline+1, yycolumn+1, yytext());
+            { curToken = new Symbol(sym.RECTANGULO, yyline, yycolumn, yytext());
+        updateTokens(curToken);
+        return curToken;
             }
           // fall through
           case 60: break;

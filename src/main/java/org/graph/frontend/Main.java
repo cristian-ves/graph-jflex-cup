@@ -5,7 +5,7 @@ import javax.swing.*;
 public class Main {
     public static void main(String[] args) {
 
-        MainFrame frame = new MainFrame("Graph JFlex & Cup");
+        UI frame = new UI("Graph JFlex & Cup");
         JPanel mainPanel = frame.getMainPanel();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().add(mainPanel);

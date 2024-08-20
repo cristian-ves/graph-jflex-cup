@@ -8,6 +8,7 @@ package org.graph.backend;
 import java.awt.Color;
 import java_cup.runtime.*;
 import org.graph.backend.tree.Node;
+import org.graph.backend.reports.*;
 import org.graph.frontend.canvas.*;
 import java_cup.runtime.XMLElement;
 
@@ -603,7 +604,7 @@ class CUP$GraphParser$actions {
 		int tleft = ((java_cup.runtime.Symbol)CUP$GraphParser$stack.peek()).left;
 		int tright = ((java_cup.runtime.Symbol)CUP$GraphParser$stack.peek()).right;
 		Node t = (Node)((java_cup.runtime.Symbol) CUP$GraphParser$stack.peek()).value;
-		 RESULT = new Node(e, t, Node.Type.ADDITION);
+		 RESULT = new Node(e, t, Node.Type.ADDITION); 
               CUP$GraphParser$result = parser.getSymbolFactory().newSymbol("expr",11, ((java_cup.runtime.Symbol)CUP$GraphParser$stack.elementAt(CUP$GraphParser$top-2)), ((java_cup.runtime.Symbol)CUP$GraphParser$stack.peek()), RESULT);
             }
           return CUP$GraphParser$result;

@@ -5,6 +5,7 @@ import java.awt.Color;
 import java_cup.runtime.*;
 
 import org.graph.backend.tree.Node;
+import org.graph.backend.reports.*;
 import org.graph.frontend.canvas.*;
 
 // Class name
@@ -147,7 +148,7 @@ s8 ::=
     ;
 
 expr ::=
-    expr:e ADDITION term:t {: RESULT = new Node(e, t, Node.Type.ADDITION);:}
+    expr:e ADDITION term:t {: RESULT = new Node(e, t, Node.Type.ADDITION); :}
     |
     expr:e SUBSTRACTION term:t {: RESULT = new Node(e, t, Node.Type.SUBSTRACTION); :}
     |
