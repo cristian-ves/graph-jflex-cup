@@ -4,8 +4,11 @@ import org.graph.backend.GraphLexer;
 import org.graph.backend.GraphParser;
 import org.graph.backend.reports.InstanceReportColor;
 import org.graph.backend.reports.InstanceReportMathOps;
+import org.graph.backend.reports.InstanceReportObjects;
+import org.graph.frontend.ReportsUI.ReportAnimationsUI;
 import org.graph.frontend.ReportsUI.ReportColorsUI;
 import org.graph.frontend.ReportsUI.ReportMathOpsUI;
+import org.graph.frontend.ReportsUI.ReportObjectsUI;
 import org.graph.frontend.canvas.GraphCanvas;
 
 import javax.swing.*;
@@ -45,6 +48,8 @@ public class UI extends JFrame{
 
     private List<InstanceReportMathOps> instancesMathOps;
     private List<InstanceReportColor> instancesColors;
+    private List<InstanceReportObjects> instancesObjects;
+    private List<InstanceReportObjects> instancesAnimations;
 
     public UI(String title){
         super(title);
@@ -97,9 +102,34 @@ public class UI extends JFrame{
                 showColorsReport(lexer);
             });
 
+            objectsReport.addActionListener(actionEvent -> {
+                showObjectsReport(lexer);
+            });
+
+            animationsReport.addActionListener(actionEvent -> {
+               showAnimationsReport(lexer);
+            });
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void showAnimationsReport(GraphLexer lexer) {
+        instancesAnimations = new ArrayList<>();
+        instancesAnimations.add(new InstanceReportObjects("Linea", lexer.getTimesLineaAnmt()));
+        instancesAnimations.add(new InstanceReportObjects("Curva", lexer.getTimesCurva()));
+        new ReportAnimationsUI(instancesAnimations);
+    }
+
+    public void showObjectsReport (GraphLexer lexer) {
+        instancesObjects = new ArrayList<>();
+        instancesObjects.add(new InstanceReportObjects("Linea", lexer.getTimesLinea()));
+        instancesObjects.add(new InstanceReportObjects("Circulo", lexer.getTimesCirculo()));
+        instancesObjects.add(new InstanceReportObjects("Cuadrado", lexer.getTimesCuadrado()));
+        instancesObjects.add(new InstanceReportObjects("Rectangulo", lexer.getTimesRectangulo()));
+        instancesObjects.add(new InstanceReportObjects("Poligono", lexer.getTimesPoligono()));
+        new ReportObjectsUI(instancesObjects);
     }
 
     public void showColorsReport (GraphLexer lexer) {

@@ -498,6 +498,44 @@ public class GraphLexer implements java_cup.runtime.Scanner {
         return timesNaranja;
     }
 
+    private int timesLinea=0;
+    private int timesCirculo=0;
+    private int timesCuadrado=0;
+    private int timesRectangulo=0;
+    private int timesPoligono=0;
+
+    public int getTimesLinea() {
+        return timesLinea;
+    }
+
+    public int getTimesCirculo() {
+        return timesCirculo;
+    }
+
+    public int getTimesCuadrado() {
+        return timesCuadrado;
+    }
+
+    public int getTimesRectangulo() {
+        return timesRectangulo;
+    }
+
+    public int getTimesPoligono() {
+        return timesPoligono;
+    }
+
+    private int timesLineaAnmt = 0;
+    private int timesCurva = 0;
+
+    public int getTimesLineaAnmt() {
+        return timesLineaAnmt;
+    }
+
+    public int getTimesCurva() {
+        return timesCurva;
+    }
+
+
 
   /**
    * Creates a new scanner
@@ -1024,12 +1062,18 @@ public class GraphLexer implements java_cup.runtime.Scanner {
           case 15:
             { curToken = new Symbol(sym.CURVA, yyline, yycolumn, yytext());
         updateTokens(curToken);
+        timesCurva++;
         return curToken;
             }
           // fall through
           case 45: break;
           case 16:
             { curToken = new Symbol(sym.LINEA, yyline, yycolumn, yytext());
+        if(penToken != null && penToken.sym != sym.ANTERIOR){
+            timesLinea++;
+        } else {
+            timesLineaAnmt++;
+        }
         updateTokens(curToken);
         return curToken;
             }
@@ -1084,6 +1128,7 @@ public class GraphLexer implements java_cup.runtime.Scanner {
           case 23:
             { curToken = new Symbol(sym.CIRCULO, yyline, yycolumn, yytext());
         updateTokens(curToken);
+        timesCirculo++;
         return curToken;
             }
           // fall through
@@ -1114,6 +1159,7 @@ public class GraphLexer implements java_cup.runtime.Scanner {
           case 27:
             { curToken = new Symbol(sym.CUADRADO, yyline, yycolumn, yytext());
         updateTokens(curToken);
+        timesCuadrado++;
         return curToken;
             }
           // fall through
@@ -1128,6 +1174,7 @@ public class GraphLexer implements java_cup.runtime.Scanner {
           case 29:
             { curToken = new Symbol(sym.POLIGONO, yyline, yycolumn, yytext());
         updateTokens(curToken);
+        timesPoligono++;
         return curToken;
             }
           // fall through
@@ -1135,6 +1182,7 @@ public class GraphLexer implements java_cup.runtime.Scanner {
           case 30:
             { curToken = new Symbol(sym.RECTANGULO, yyline, yycolumn, yytext());
         updateTokens(curToken);
+        timesRectangulo++;
         return curToken;
             }
           // fall through

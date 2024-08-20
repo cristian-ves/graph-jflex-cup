@@ -124,6 +124,44 @@ import org.graph.backend.reports.*;
     public int getTimesNaranja() {
         return timesNaranja;
     }
+
+    private int timesLinea=0;
+    private int timesCirculo=0;
+    private int timesCuadrado=0;
+    private int timesRectangulo=0;
+    private int timesPoligono=0;
+
+    public int getTimesLinea() {
+        return timesLinea;
+    }
+
+    public int getTimesCirculo() {
+        return timesCirculo;
+    }
+
+    public int getTimesCuadrado() {
+        return timesCuadrado;
+    }
+
+    public int getTimesRectangulo() {
+        return timesRectangulo;
+    }
+
+    public int getTimesPoligono() {
+        return timesPoligono;
+    }
+
+    private int timesLineaAnmt = 0;
+    private int timesCurva = 0;
+
+    public int getTimesLineaAnmt() {
+        return timesLineaAnmt;
+    }
+
+    public int getTimesCurva() {
+        return timesCurva;
+    }
+
 %}
 
 // Regular definitions
@@ -161,26 +199,35 @@ name = {letter}+({number}*{letter}*)*
     "circulo" {
         curToken = new Symbol(sym.CIRCULO, yyline, yycolumn, yytext());
         updateTokens(curToken);
+        timesCirculo++;
         return curToken;
     }
     "cuadrado" {
         curToken = new Symbol(sym.CUADRADO, yyline, yycolumn, yytext());
         updateTokens(curToken);
+        timesCuadrado++;
         return curToken;
     }
     "rectangulo" {
         curToken = new Symbol(sym.RECTANGULO, yyline, yycolumn, yytext());
         updateTokens(curToken);
+        timesRectangulo++;
         return curToken;
     }
     "linea" {
         curToken = new Symbol(sym.LINEA, yyline, yycolumn, yytext());
+        if(penToken != null && penToken.sym != sym.ANTERIOR){
+            timesLinea++;
+        } else {
+            timesLineaAnmt++;
+        }
         updateTokens(curToken);
         return curToken;
     }
     "poligono" {
         curToken = new Symbol(sym.POLIGONO, yyline, yycolumn, yytext());
         updateTokens(curToken);
+        timesPoligono++;
         return curToken;
     }
     "azul" {
@@ -240,6 +287,7 @@ name = {letter}+({number}*{letter}*)*
     "curva" {
         curToken = new Symbol(sym.CURVA, yyline, yycolumn, yytext());
         updateTokens(curToken);
+        timesCurva++;
         return curToken;
     }
     

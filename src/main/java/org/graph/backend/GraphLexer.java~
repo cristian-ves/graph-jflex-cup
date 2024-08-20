@@ -453,10 +453,88 @@ public class GraphLexer implements java_cup.runtime.Scanner {
     }
 
     private int timesBlue = 0;
+    private int timesRojo = 0;
+    private int timesAmarillo = 0;
+    private int timesVerde = 0;
+    private int timesCeleste = 0;
+    private int timesNegro = 0;
+    private int timesRosado = 0;
+    private int timesCafe = 0;
+    private int timesNaranja = 0;
 
     public int getTimesBlue() {
         return timesBlue;
     }
+
+    public int getTimesRojo() {
+        return timesRojo;
+    }
+
+    public int getTimesAmarillo() {
+        return timesAmarillo;
+    }
+
+    public int getTimesVerde() {
+        return timesVerde;
+    }
+
+    public int getTimesCeleste() {
+        return timesCeleste;
+    }
+
+    public int getTimesNegro() {
+        return timesNegro;
+    }
+
+    public int getTimesRosado() {
+        return timesRosado;
+    }
+
+    public int getTimesCafe() {
+        return timesCafe;
+    }
+
+    public int getTimesNaranja() {
+        return timesNaranja;
+    }
+
+    private int timesLinea=0;
+    private int timesCirculo=0;
+    private int timesCuadrado=0;
+    private int timesRectangulo=0;
+    private int timesPoligono=0;
+
+    public int getTimesLinea() {
+        return timesLinea;
+    }
+
+    public int getTimesCirculo() {
+        return timesCirculo;
+    }
+
+    public int getTimesCuadrado() {
+        return timesCuadrado;
+    }
+
+    public int getTimesRectangulo() {
+        return timesRectangulo;
+    }
+
+    public int getTimesPoligono() {
+        return timesPoligono;
+    }
+
+    private int timesLineaAnmt = 0;
+    private int timesCurva = 0;
+
+    public int getTimesLineaAnmt() {
+        return timesLineaAnmt;
+    }
+
+    public int getTimesCurva() {
+        return timesCurva;
+    }
+
 
 
   /**
@@ -968,6 +1046,7 @@ public class GraphLexer implements java_cup.runtime.Scanner {
           case 13:
             { curToken = new Symbol(sym.CAFE, yyline, yycolumn, yytext());
         updateTokens(curToken);
+        timesCafe++;
         return curToken;
             }
           // fall through
@@ -975,6 +1054,7 @@ public class GraphLexer implements java_cup.runtime.Scanner {
           case 14:
             { curToken = new Symbol(sym.ROJO, yyline, yycolumn, yytext());
         updateTokens(curToken);
+        timesRojo++;
         return curToken;
             }
           // fall through
@@ -982,6 +1062,7 @@ public class GraphLexer implements java_cup.runtime.Scanner {
           case 15:
             { curToken = new Symbol(sym.CURVA, yyline, yycolumn, yytext());
         updateTokens(curToken);
+        timesCurva++;
         return curToken;
             }
           // fall through
@@ -989,6 +1070,11 @@ public class GraphLexer implements java_cup.runtime.Scanner {
           case 16:
             { curToken = new Symbol(sym.LINEA, yyline, yycolumn, yytext());
         updateTokens(curToken);
+        if(penToken != null && penToken.sym != sym.ANTERIOR){
+            timesLinea++;
+        } else {
+            timesLineaAnmt++;
+        }
         return curToken;
             }
           // fall through
@@ -996,6 +1082,7 @@ public class GraphLexer implements java_cup.runtime.Scanner {
           case 17:
             { curToken = new Symbol(sym.NEGRO, yyline, yycolumn, yytext());
         updateTokens(curToken);
+        timesNegro++;
         return curToken;
             }
           // fall through
@@ -1003,6 +1090,7 @@ public class GraphLexer implements java_cup.runtime.Scanner {
           case 18:
             { curToken = new Symbol(sym.VERDE, yyline, yycolumn, yytext());
         updateTokens(curToken);
+        timesVerde++;
         return curToken;
             }
           // fall through
@@ -1024,6 +1112,7 @@ public class GraphLexer implements java_cup.runtime.Scanner {
           case 21:
             { curToken = new Symbol(sym.ROSADO, yyline, yycolumn, yytext());
         updateTokens(curToken);
+        timesRosado++;
         return curToken;
             }
           // fall through
@@ -1031,6 +1120,7 @@ public class GraphLexer implements java_cup.runtime.Scanner {
           case 22:
             { curToken = new Symbol(sym.CELESTE, yyline, yycolumn, yytext());
         updateTokens(curToken);
+        timesCeleste++;
         return curToken;
             }
           // fall through
@@ -1038,6 +1128,7 @@ public class GraphLexer implements java_cup.runtime.Scanner {
           case 23:
             { curToken = new Symbol(sym.CIRCULO, yyline, yycolumn, yytext());
         updateTokens(curToken);
+        timesCirculo++;
         return curToken;
             }
           // fall through
@@ -1045,6 +1136,7 @@ public class GraphLexer implements java_cup.runtime.Scanner {
           case 24:
             { curToken = new Symbol(sym.NARANJA, yyline, yycolumn, yytext());
         updateTokens(curToken);
+        timesNaranja++;
         return curToken;
             }
           // fall through
@@ -1052,6 +1144,7 @@ public class GraphLexer implements java_cup.runtime.Scanner {
           case 25:
             { curToken = new Symbol(sym.AMARILLO, yyline, yycolumn, yytext());
         updateTokens(curToken);
+        timesAmarillo++;
         return curToken;
             }
           // fall through
@@ -1066,6 +1159,7 @@ public class GraphLexer implements java_cup.runtime.Scanner {
           case 27:
             { curToken = new Symbol(sym.CUADRADO, yyline, yycolumn, yytext());
         updateTokens(curToken);
+        timesCuadrado++;
         return curToken;
             }
           // fall through
@@ -1080,6 +1174,7 @@ public class GraphLexer implements java_cup.runtime.Scanner {
           case 29:
             { curToken = new Symbol(sym.POLIGONO, yyline, yycolumn, yytext());
         updateTokens(curToken);
+        timesPoligono++;
         return curToken;
             }
           // fall through
@@ -1087,6 +1182,7 @@ public class GraphLexer implements java_cup.runtime.Scanner {
           case 30:
             { curToken = new Symbol(sym.RECTANGULO, yyline, yycolumn, yytext());
         updateTokens(curToken);
+        timesRectangulo++;
         return curToken;
             }
           // fall through
